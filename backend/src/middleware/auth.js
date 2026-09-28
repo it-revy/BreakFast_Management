@@ -27,29 +27,40 @@ const protect = async (req, res, next) => {
 
     // Fetch full permission matrix for all assigned roles
     const roleDocs = await Role.find({ code: { $in: employee.roles } });
-    
+
     // Calculate permission union across all assigned roles
     const permissionsSet = new Set();
     roleDocs.forEach(roleDoc => {
       roleDoc.permissions.forEach(perm => permissionsSet.add(perm));
     });
 
+    const activeRoleHeader = req.headers['x-role-used'];
+    const activeRole = (activeRoleHeader && employee.roles.includes(activeRoleHeader))
+      ? activeRoleHeader
+      : employee.roles[0];
+
+    // Determine active role permissions for authoritative role-scoped authorization
+    const activeRoleDoc = roleDocs.find(r => r.code === activeRole);
+    const activePermissions = activeRoleDoc ? activeRoleDoc.permissions : [];
+
     req.user = {
       _id: employee._id,
       employeeId: employee.employeeId,
+      username: employee.username,
       name: employee.name,
       email: employee.email,
       department: employee.department,
       designation: employee.designation,
       roles: employee.roles,
       breakfastParticipationType: employee.breakfastParticipationType,
-      permissions: Array.from(permissionsSet),
-      activeRole: req.headers['x-role-used'] || employee.roles[0]
+      allPermissions: Array.from(permissionsSet),
+      permissions: activePermissions, // Authoritative permissions for currently active role
+      activeRole
     };
 
     next();
   } catch (error) {
-    return res.status(401).json({ success: false, message: 'Invalid or expired token', error: error.message });
+    return res.status(401).json({ success: false, message: 'Invalid or expired token' });
   }
 };
 

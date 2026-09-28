@@ -13,22 +13,22 @@ describe('All Orders Unified View & Employee Permissions Verification', () => {
     await connectDB();
     await seedDatabase();
 
-    // Login as BF Admin (Faiz Saiyad - EMP-0002)
+    // Login as BF Admin (Faiz Saiyad - faiz)
     const bfRes = await request(app)
       .post('/api/auth/login')
-      .send({ loginId: 'EMP-0002', password: 'Password123!' });
+      .send({ username: 'faiz', password: 'Faiz123' });
     bfAdminToken = bfRes.body.token;
 
-    // Login as CEO (Rajneesh Prasad - EMP-0003)
+    // Login as CEO (Rajneesh Prasad - rajneesh)
     const ceoRes = await request(app)
       .post('/api/auth/login')
-      .send({ loginId: 'EMP-0003', password: 'Password123!' });
+      .send({ username: 'rajneesh', password: 'Rajneesh123' });
     ceoToken = ceoRes.body.token;
 
-    // Login as IT Admin (Vasudev Kava - EMP-0001)
+    // Login as IT Admin (Vasudev Kava - vasudev)
     const itRes = await request(app)
       .post('/api/auth/login')
-      .send({ loginId: 'EMP-0001', password: 'Password123!' });
+      .send({ username: 'vasudev', password: 'Vasudev123' });
     itAdminToken = itRes.body.token;
   });
 

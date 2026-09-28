@@ -15,13 +15,13 @@ describe('Breakfast Money & Actual Status Mapping Integration Tests', () => {
     // Login as Breakfast Admin
     const adminRes = await request(app)
       .post('/api/auth/login')
-      .send({ loginId: 'EMP-0002', password: 'Password123!' });
+      .send({ username: 'faiz', password: 'Faiz123' });
     adminToken = adminRes.body.token;
 
     // Login as Employee
     const empRes = await request(app)
       .post('/api/auth/login')
-      .send({ loginId: 'EMP-0004', password: 'Password123!' });
+      .send({ username: 'jyoti', password: 'Jyoti123' });
     employeeToken = empRes.body.token;
   });
 

@@ -2,6 +2,7 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const connectDB = require('../src/config/db');
 const app = require('../src/index');
+const { seedDatabase } = require('../src/utils/seedData');
 
 describe('Employee Admin CRUD & Soft/Hard Delete Tests', () => {
   let adminToken = '';
@@ -9,9 +10,10 @@ describe('Employee Admin CRUD & Soft/Hard Delete Tests', () => {
 
   beforeAll(async () => {
     await connectDB();
+    await seedDatabase();
     const res = await request(app)
       .post('/api/auth/login')
-      .send({ loginId: 'EMP-0001', password: 'Password123!' });
+      .send({ username: 'vasudev', password: 'Vasudev123' });
     adminToken = res.body.token;
   });
 

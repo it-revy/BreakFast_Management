@@ -143,6 +143,7 @@ const rolesData = [
       'breakfast.employee.update',
       'breakfast.employee.deactivate',
       'breakfast.view_own',
+      'breakfast.submit',
       'breakfast.history_own'
     ]
   }
@@ -180,7 +181,15 @@ const seedDatabase = async () => {
   // 4. Seed Breakfast Settings
   const existingSetting = await BreakfastSetting.findOne();
   if (!existingSetting) {
-    await BreakfastSetting.create({ cutoffTime: '12:00', timezone: 'Asia/Kolkata', autoLockEnabled: true });
+    await BreakfastSetting.create({
+      cutoffTime: '12:00',
+      timezone: 'Asia/Kolkata',
+      autoLockEnabled: true,
+      breakfastFundLimit: 2500
+    });
+  } else if (!existingSetting.breakfastFundLimit) {
+    existingSetting.breakfastFundLimit = 2500;
+    await existingSetting.save();
   }
 
   // 5. Seed Breakfast Reasons
@@ -349,7 +358,8 @@ const seedDatabase = async () => {
       });
       console.log(`[Seed] Initial user created: ${account.username}`);
     } else {
-      // Update metadata and ensure forcePasswordChange is set for initial accounts
+      // Update metadata and ensure account fields are aligned
+      existing.username = account.username;
       existing.name = account.name;
       existing.email = account.email;
       existing.phone = account.phone;
@@ -357,7 +367,13 @@ const seedDatabase = async () => {
       existing.designation = account.designation;
       existing.roles = account.roles;
       existing.breakfastParticipationType = account.breakfastParticipationType;
-      existing.forcePasswordChange = true;
+
+      // If user hasn't changed password yet (forcePasswordChange is true), missing hash, or explicit reset
+      if (!existing.passwordHash || existing.forcePasswordChange || process.env.RESET_SEEDED_PASSWORDS === 'true') {
+        existing.passwordHash = await bcrypt.hash(account.initialPasswordText, 10);
+        existing.forcePasswordChange = true;
+      }
+
       await existing.save();
     }
   }

@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env'), override: true });
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -24,7 +25,43 @@ const app = express();
 app.use(helmet({
   contentSecurityPolicy: false // Allow Swagger UI inline scripts
 }));
-app.use(cors());
+
+// Whitelist CORS configuration for Vercel frontend and authorized clients
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.CLIENT_URL,
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1:3000'
+].filter(Boolean);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow non-browser requests or same-origin (health checks, curl, server-to-server)
+    if (!origin) return callback(null, true);
+
+    // Exact match against whitelist
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // Support for Vercel preview deployments during staging if explicitly enabled
+    if (process.env.ALLOW_VERCEL_PREVIEWS === 'true' && /^https:\/\/[a-zA-Z0-9_-]+\.vercel\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    // Allow in local development mode
+    if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Blocked by CORS policy: Origin not allowed'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Role-Used']
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Serve OpenAPI/Swagger UI docs at /api/docs
@@ -43,40 +80,53 @@ app.use('/api/orders', orderRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({
+  res.status(200).json({
     success: true,
-    status: 'healthy',
-    application: 'Breakfast Management System (Shared Platform)',
-    timestamp: new Date().toISOString(),
-    timezone: 'Asia/Kolkata',
-    docs: 'http://localhost:5000/api/docs'
+    status: 'healthy'
   });
 });
 
-// Centralized error handler
+// Centralized production-safe error handler
 app.use((err, req, res, next) => {
-  console.error('[Global Error]', err);
-  res.status(err.status || 500).json({
+  const isProduction = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging';
+
+  if (!isProduction) {
+    console.error('[Global Error]', err);
+  } else {
+    // Production-safe logging: never leak stack traces or internal filesystem paths to console
+    console.error(`[Global Error] [${req.method} ${req.path}]:`, err.message);
+  }
+
+  const statusCode = (typeof err.status === 'number' && err.status >= 400 && err.status < 600)
+    ? err.status
+    : 500;
+
+  res.status(statusCode).json({
     success: false,
-    message: err.message || 'Internal Server Error'
+    message: isProduction && statusCode === 500
+      ? 'Internal Server Error'
+      : err.message || 'Internal Server Error'
   });
 });
 
 const PORT = process.env.PORT || 5000;
+const HOST = '0.0.0.0';
 
 const startServer = async () => {
   await connectDB();
 
   try {
-    console.log('[Init] Syncing permissions and roles...');
+    console.log('[Init] Syncing platform roles, permissions, settings, and baseline accounts...');
     await seedDatabase();
   } catch (err) {
-    console.log('[Init] Skip auto-seed or database not reachable yet:', err.message);
+    console.warn('[Init] Auto-seed note:', err.message);
   }
 
-  app.listen(PORT, () => {
-    console.log(`[Server] Breakfast Management API running on port ${PORT}`);
-    console.log(`[Docs] Swagger OpenAPI Documentation: http://localhost:${PORT}/api/docs`);
+  app.listen(PORT, HOST, () => {
+    console.log(`[Server] Breakfast Management API running on ${HOST}:${PORT} (NODE_ENV=${process.env.NODE_ENV || 'development'})`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`[Docs] Swagger OpenAPI Documentation: http://localhost:${PORT}/api/docs`);
+    }
   });
 };
 

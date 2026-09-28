@@ -13,7 +13,7 @@ describe('Breakfast Purchase Orders & Itemized Cost Engine Tests', () => {
 
     const res = await request(app)
       .post('/api/auth/login')
-      .send({ loginId: 'EMP-0001', password: 'Password123!' });
+      .send({ username: 'vasudev', password: 'Vasudev123' });
     adminToken = res.body.token;
   });
 

@@ -13,7 +13,7 @@ describe('Breakfast Daily Submission & Validation Tests', () => {
 
     const res = await request(app)
       .post('/api/auth/login')
-      .send({ loginId: 'EMP-0003', password: 'Password123!' });
+      .send({ username: 'rajneesh', password: 'Rajneesh123' });
     empToken = res.body.token;
   });
 

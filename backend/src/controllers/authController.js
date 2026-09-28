@@ -15,13 +15,9 @@ const login = async (req, res) => {
 
     const normalizedIdentifier = inputIdentifier.toLowerCase();
 
-    // Search by username, employeeId, or email
+    // Strictly authenticate by username only. Employee ID is prohibited for login.
     const employee = await Employee.findOne({
-      $or: [
-        { username: normalizedIdentifier },
-        { employeeId: inputIdentifier.toUpperCase() },
-        { email: normalizedIdentifier }
-      ],
+      username: normalizedIdentifier,
       isHardDeleted: false
     });
 
@@ -33,23 +29,21 @@ const login = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Account is deactivated. Contact IT Administrator.' });
     }
 
-    let isMatch = await bcrypt.compare(password, employee.passwordHash);
-    if (!isMatch && employee.forcePasswordChange) {
-      const firstName = employee.name ? employee.name.split(' ')[0] : '';
-      const expectedInitialPassword = `${firstName}123`;
-      if (password === expectedInitialPassword || password === 'Password123!') {
-        isMatch = true;
-      }
-    }
+    // Secure bcrypt comparison with stored hash only - no plaintext bypasses
+    const isMatch = await bcrypt.compare(password, employee.passwordHash);
 
     if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Invalid username or password' });
     }
 
-    // Calculate permissions across assigned roles
+    // Calculate permissions across assigned roles and mapped per role
     const roleDocs = await Role.find({ code: { $in: employee.roles } });
+    const permissionsByRole = {};
     const permissionsSet = new Set();
-    roleDocs.forEach(r => r.permissions.forEach(p => permissionsSet.add(p)));
+    roleDocs.forEach(r => {
+      permissionsByRole[r.code] = r.permissions || [];
+      (r.permissions || []).forEach(p => permissionsSet.add(p));
+    });
 
     const permissions = Array.from(permissionsSet);
 
@@ -77,7 +71,8 @@ const login = async (req, res) => {
       roles: employee.roles,
       breakfastParticipationType: employee.breakfastParticipationType,
       forcePasswordChange: !!employee.forcePasswordChange,
-      permissions
+      permissions,
+      permissionsByRole
     };
 
     // Log audit login
@@ -90,7 +85,7 @@ const login = async (req, res) => {
       user: userObj
     });
   } catch (error) {
-    console.error('[Auth Login Error]', error);
+    console.error('[Auth Login Error]', error.message);
     res.status(500).json({ success: false, message: 'Unable to process the request.', code: 'INTERNAL_SERVER_ERROR' });
   }
 };
@@ -102,16 +97,23 @@ const getMe = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Employee account not found' });
     }
 
+    const roleDocs = await Role.find({ code: { $in: employee.roles } });
+    const permissionsByRole = {};
+    roleDocs.forEach(r => {
+      permissionsByRole[r.code] = r.permissions || [];
+    });
+
     res.json({
       success: true,
       user: {
         ...employee.toJSON(),
         forcePasswordChange: !!employee.forcePasswordChange,
-        permissions: req.user.permissions
+        permissions: req.user.allPermissions || req.user.permissions,
+        permissionsByRole
       }
     });
   } catch (error) {
-    console.error('[Auth GetMe Error]', error);
+    console.error('[Auth GetMe Error]', error.message);
     res.status(500).json({ success: false, message: 'Unable to process the request.', code: 'INTERNAL_SERVER_ERROR' });
   }
 };
