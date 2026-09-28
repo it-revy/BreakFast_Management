@@ -1,0 +1,26 @@
+{
+  "name": "breakfast-management-platform",
+  "version": "1.0.0",
+  "description": "Production-ready enterprise Breakfast Management System and shared company platform core",
+  "main": "backend/src/index.js",
+  "scripts": {
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "seed": "cd backend && npm run seed",
+    "test": "cd backend && npm test",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "enterprise",
+    "breakfast-management",
+    "react",
+    "express",
+    "mongodb",
+    "jwt",
+    "rbac",
+    "audit-logs"
+  ],
+  "author": "REVY Enterprise Engineering Team",
+  "license": "ISC"
+}
