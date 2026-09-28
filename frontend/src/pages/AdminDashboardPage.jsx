@@ -145,19 +145,19 @@ const AdminDashboardPage = () => {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap', width: 'auto' }}>
           <input
             type="date"
             className="form-input"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            style={{ width: '160px', padding: '0.45rem 0.75rem' }}
+            style={{ width: 'auto', minWidth: '140px', flex: '1 1 auto', padding: '0.45rem 0.75rem' }}
           />
           <select
             className="form-select"
             value={departmentFilter}
             onChange={(e) => setDepartmentFilter(e.target.value)}
-            style={{ width: '190px', padding: '0.45rem 0.75rem' }}
+            style={{ width: 'auto', minWidth: '160px', flex: '1 1 auto', padding: '0.45rem 0.75rem' }}
           >
             <option value="ALL">All Departments</option>
             <option value="IT Infrastructure">IT Infrastructure</option>
@@ -196,7 +196,7 @@ const AdminDashboardPage = () => {
       )}
 
       {/* THREE PRIMARY QUICK ACTIONS */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem', marginBottom: '1.75rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '1.25rem', marginBottom: '1.75rem' }}>
         <div
           className="panel-card"
           style={{
@@ -351,7 +351,7 @@ const AdminDashboardPage = () => {
       {/* Tabs & Table */}
       <div className="glass-panel" style={{ padding: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <div className="tabs-scroll">
             <button
               className={`btn ${activeTab === 'TAKING' ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setActiveTab('TAKING')}
@@ -382,14 +382,14 @@ const AdminDashboardPage = () => {
             </button>
           </div>
 
-          <form onSubmit={handleSearch} style={{ display: 'flex', gap: '0.5rem' }}>
+          <form onSubmit={handleSearch} style={{ display: 'flex', gap: '0.5rem', flex: '1 1 200px', maxWidth: '340px' }}>
             <input
               type="text"
               className="form-input"
               placeholder="Search employee name or ID..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ width: '200px', padding: '0.4rem 0.75rem', fontSize: '0.85rem' }}
+              style={{ flex: 1, padding: '0.4rem 0.75rem', fontSize: '0.85rem' }}
             />
             <button type="submit" className="btn btn-secondary" style={{ padding: '0.4rem 0.75rem' }}>
               <Search size={15} />

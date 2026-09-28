@@ -32,19 +32,36 @@ describe('Breakfast Daily Submission & Validation Tests', () => {
     expect(res.body).toHaveProperty('cutoffTime');
   });
 
-  test('POST /api/breakfast/multi-day-absence - Records multi-day planned absence', async () => {
+  test('POST /api/breakfast/submit - Submits Taking Breakfast (YES)', async () => {
     const res = await request(app)
-      .post('/api/breakfast/multi-day-absence')
+      .post('/api/breakfast/submit')
       .set('Authorization', `Bearer ${empToken}`)
-      .send({
-        fromDate: '2026-10-10',
-        toDate: '2026-10-12',
-        reasonCode: 'ON_LEAVE',
-        reasonText: 'Vacation Leave'
-      });
+      .send({ response: 'YES' });
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.datesCount).toEqual(3);
+    expect(res.body.record.response).toEqual('YES');
+  });
+
+  test('POST /api/breakfast/submit - Updates response to Not Taking Breakfast (NO) with valid reason', async () => {
+    const res = await request(app)
+      .post('/api/breakfast/submit')
+      .set('Authorization', `Bearer ${empToken}`)
+      .send({ response: 'NO', reasonCode: 'FASTING' });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.record.response).toEqual('NO');
+    expect(res.body.record.reasonCode).toEqual('FASTING');
+  });
+
+  test('GET /api/breakfast/history - Returns personal submission history', async () => {
+    const res = await request(app)
+      .get('/api/breakfast/history')
+      .set('Authorization', `Bearer ${empToken}`);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.records)).toBe(true);
   });
 });

@@ -208,8 +208,8 @@ const FinanceManagerPage = () => {
             <FileText size={20} color="var(--accent-primary)" /> Breakfast Fund Requests
           </h3>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <div style={{ position: 'relative', minWidth: '220px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', width: '100%', maxWidth: '460px' }}>
+            <div style={{ position: 'relative', flex: '1 1 180px', minWidth: '140px' }}>
               <Search size={15} color="var(--text-muted)" style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)' }} />
               <input
                 type="text"
@@ -217,7 +217,7 @@ const FinanceManagerPage = () => {
                 placeholder="Search request ID, requester..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                style={{ paddingLeft: '2.25rem', fontSize: '0.85rem' }}
+                style={{ paddingLeft: '2.25rem', fontSize: '0.85rem', width: '100%' }}
               />
             </div>
 
@@ -225,7 +225,7 @@ const FinanceManagerPage = () => {
               className="form-select"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              style={{ fontSize: '0.85rem', width: '180px' }}
+              style={{ fontSize: '0.85rem', flex: '1 1 160px', minWidth: '140px' }}
             >
               <option value="ALL">All Statuses</option>
               <option value="PENDING_APPROVAL">Pending Approval</option>
@@ -456,7 +456,7 @@ const FinanceManagerPage = () => {
               </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+            <div className="form-grid-2" style={{ marginBottom: '1rem' }}>
               <div className="form-group">
                 <label className="form-label">Provided Amount (₹) *</label>
                 <input
@@ -480,7 +480,7 @@ const FinanceManagerPage = () => {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+            <div className="form-grid-2" style={{ marginBottom: '1rem' }}>
               <div className="form-group">
                 <label className="form-label">Provided Date *</label>
                 <input

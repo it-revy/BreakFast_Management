@@ -146,20 +146,22 @@ const EmployeeDailyPage = () => {
   return (
     <div className="page-body">
       {/* Header Greeting */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.4rem' }}>Good Morning, {user?.name}</h1>
-          <p style={{ color: 'var(--text-secondary)', marginTop: '0.2rem', fontSize: '0.85rem' }}>
-            Active Business Date: <strong style={{ color: 'var(--text-primary)' }}>{statusData?.activeFormattedDisplay || statusData?.businessDate}</strong> (Asia/Kolkata)
+          <h1 style={{ fontSize: '1.4rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <Utensils size={24} color="var(--accent-primary)" /> My Breakfast Response
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', marginTop: '0.25rem', fontSize: '0.85rem' }}>
+            Logged in as: <strong>{user?.name}</strong> ({user?.employeeId}) • Active Date: <strong style={{ color: 'var(--text-primary)' }}>{statusData?.activeFormattedDisplay || statusData?.businessDate}</strong>
           </p>
           {statusData?.isCutoffPassed && (
-            <span className="badge badge-warning" style={{ marginTop: '0.3rem', fontSize: '0.75rem' }}>
-              ⏰ Past 12:00 PM Cutoff — Displaying Next Working Day Cycle ({statusData?.activeFormattedDisplay})
+            <span className="badge badge-warning" style={{ marginTop: '0.35rem', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+              ⏰ Past 12:00 PM Cutoff — Response applies to Next Working Day ({statusData?.activeFormattedDisplay})
             </span>
           )}
         </div>
 
-        <div className="panel-card" style={{ padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+        <div className="panel-card" style={{ padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
           <Clock size={18} color="var(--warning)" />
           <div>
             <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', display: 'block', fontWeight: 600 }}>CUTOFF WINDOW</span>
@@ -222,7 +224,7 @@ const EmployeeDailyPage = () => {
       ) : (
         <div className="panel-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
           {/* Sub Tab Switcher */}
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.6rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.6rem', flexWrap: 'wrap' }}>
             <button
               className={`btn ${activeSubTab === 'SINGLE_DAY' ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setActiveSubTab('SINGLE_DAY')}
@@ -244,10 +246,10 @@ const EmployeeDailyPage = () => {
               {/* If response exists and not editing mode, show clean status display */}
               {hasExistingResponse && !editingMode ? (
                 <div style={{ background: '#f8fafc', padding: '1.25rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
                     <div>
                       <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase' }}>TODAY'S SUBMITTED STATUS</span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginTop: '0.35rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginTop: '0.35rem', flexWrap: 'wrap' }}>
                         <span className={`badge ${statusData.todayRecord.response === 'YES' ? 'badge-success' : 'badge-danger'}`} style={{ fontSize: '0.9rem', padding: '0.35rem 0.75rem' }}>
                           {statusData.todayRecord.response === 'YES' ? '✓ TAKING BREAKFAST' : '✕ NOT TAKING'}
                         </span>
@@ -282,24 +284,24 @@ const EmployeeDailyPage = () => {
                         <label className="form-label" style={{ marginBottom: '0.6rem', display: 'block' }}>
                           Will you take breakfast today? ({statusData?.businessDate})
                         </label>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div className="form-grid-2">
                           <button
                             type="button"
                             className={`btn ${response === 'YES' ? 'btn-success' : 'btn-secondary'}`}
-                            style={{ padding: '0.85rem', fontSize: '1rem', fontWeight: 600 }}
+                            style={{ padding: '0.85rem', fontSize: '1rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
                             onClick={() => setResponse('YES')}
                           >
                             <CheckCircle2 size={20} />
-                            YES — Taking
+                            Taking Breakfast
                           </button>
                           <button
                             type="button"
                             className={`btn ${response === 'NO' ? 'btn-danger' : 'btn-secondary'}`}
-                            style={{ padding: '0.85rem', fontSize: '1rem', fontWeight: 600 }}
+                            style={{ padding: '0.85rem', fontSize: '1rem', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
                             onClick={() => setResponse('NO')}
                           >
                             <XCircle size={20} />
-                            NO — Not Taking
+                            Not Taking Breakfast
                           </button>
                         </div>
                       </div>

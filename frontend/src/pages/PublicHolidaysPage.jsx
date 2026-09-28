@@ -56,7 +56,7 @@ const PublicHolidaysPage = () => {
 
   return (
     <div className="page-body">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <CalendarRange color="var(--accent-primary)" /> Public Holidays Management
@@ -95,7 +95,11 @@ const PublicHolidaysPage = () => {
                 holidays.map(h => (
                   <tr key={h.holidayId}>
                     <td><span style={{ fontSize: '0.8rem', fontFamily: 'monospace' }}>{h.holidayId}</span></td>
-                    <td><strong style={{ color: 'white' }}>{h.date}</strong></td>
+                    <td>
+                      <strong style={{ color: 'var(--text-primary)', fontWeight: 600 }}>
+                        {h.date}
+                      </strong>
+                    </td>
                     <td><strong>{h.name}</strong></td>
                     <td><span className="badge badge-success">{h.status}</span></td>
                     <td style={{ color: 'var(--text-secondary)' }}>{h.createdBy}</td>

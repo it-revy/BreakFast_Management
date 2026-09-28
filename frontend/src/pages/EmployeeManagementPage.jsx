@@ -244,7 +244,7 @@ const EmployeeManagementPage = () => {
 
   return (
     <div className="page-body">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <Users color="var(--accent-primary)" /> Employee & User Account Management
@@ -264,7 +264,7 @@ const EmployeeManagementPage = () => {
 
       {/* Search & Filter Bar */}
       <div className="glass-panel" style={{ padding: '1.25rem', marginBottom: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, minWidth: '220px' }}>
+        <div style={{ flex: '1 1 220px', minWidth: '200px' }}>
           <input
             type="text"
             className="form-input"
@@ -274,7 +274,7 @@ const EmployeeManagementPage = () => {
           />
         </div>
 
-        <select className="form-select" style={{ width: '180px' }} value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
+        <select className="form-select" style={{ flex: '1 1 160px', width: 'auto', minWidth: '140px' }} value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
           <option value="ALL">All Departments</option>
           <option value="IT Infrastructure">IT Infrastructure</option>
           <option value="Administration">Administration</option>
@@ -283,13 +283,13 @@ const EmployeeManagementPage = () => {
           <option value="Executive Office">Executive Office</option>
         </select>
 
-        <select className="form-select" style={{ width: '160px' }} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+        <select className="form-select" style={{ flex: '1 1 140px', width: 'auto', minWidth: '130px' }} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
           <option value="ALL">All Statuses</option>
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
         </select>
 
-        <select className="form-select" style={{ width: '180px' }} value={participationFilter} onChange={(e) => setParticipationFilter(e.target.value)}>
+        <select className="form-select" style={{ flex: '1 1 160px', width: 'auto', minWidth: '140px' }} value={participationFilter} onChange={(e) => setParticipationFilter(e.target.value)}>
           <option value="ALL">All Participation</option>
           <option value="NORMAL">Normal</option>
           <option value="PERMANENT_NOT_TAKING">Permanent Not Taking</option>
@@ -443,7 +443,7 @@ const EmployeeManagementPage = () => {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="form-grid-2">
                 <div className="form-group">
                   <label className="form-label">Email Address *</label>
                   <input
@@ -465,7 +465,7 @@ const EmployeeManagementPage = () => {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="form-grid-2">
                 <div className="form-group">
                   <label className="form-label">Department *</label>
                   <input
@@ -488,7 +488,7 @@ const EmployeeManagementPage = () => {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="form-grid-2">
                 <div className="form-group">
                   <label className="form-label">Breakfast Participation Type *</label>
                   <select

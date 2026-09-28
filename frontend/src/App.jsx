@@ -82,6 +82,7 @@ function AppRoutes() {
   const getHomeRedirect = () => {
     if (!user) return '/login';
     if (hasPermission('breakfast.view')) return '/admin/dashboard';
+    if (hasPermission('breakfast.dashboard.view')) return '/ceo-dashboard';
     if (hasPermission('finance.breakfast_fund.view')) return '/finance/fund-requests';
     return '/today';
   };
@@ -90,10 +91,27 @@ function AppRoutes() {
     <Routes>
       <Route path="/login" element={user ? <Navigate to={getHomeRedirect()} replace /> : <LoginPage />} />
 
+      {/* Common Breakfast Response - Accessible by ANY authenticated user */}
       <Route
         path="/today"
         element={
-          <ProtectedLayout requiredPermission="breakfast.view_own">
+          <ProtectedLayout>
+            <EmployeeDailyPage />
+          </ProtectedLayout>
+        }
+      />
+      <Route
+        path="/response"
+        element={
+          <ProtectedLayout>
+            <EmployeeDailyPage />
+          </ProtectedLayout>
+        }
+      />
+      <Route
+        path="/breakfast-response"
+        element={
+          <ProtectedLayout>
             <EmployeeDailyPage />
           </ProtectedLayout>
         }

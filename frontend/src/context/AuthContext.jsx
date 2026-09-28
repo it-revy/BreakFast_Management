@@ -108,14 +108,20 @@ export const AuthProvider = ({ children }) => {
 
   const hasPermission = (permission) => {
     if (!user) return false;
-    // Check authoritative permissions of the currently active role
-    if (activeRole && user.permissionsByRole && user.permissionsByRole[activeRole]) {
-      const rolePerms = user.permissionsByRole[activeRole];
-      return rolePerms.includes('*') || rolePerms.includes(permission);
+    // Authoritative permissions assigned to the authenticated user
+    if (user.permissions && (user.permissions.includes('*') || user.permissions.includes(permission))) {
+      return true;
     }
-    // Fallback to general user permissions
-    if (!user.permissions) return false;
-    return user.permissions.includes('*') || user.permissions.includes(permission);
+    // Check across all user's assigned roles in permissionsByRole
+    if (user.permissionsByRole && Array.isArray(user.roles)) {
+      for (const r of user.roles) {
+        const rolePerms = user.permissionsByRole[r];
+        if (rolePerms && (rolePerms.includes('*') || rolePerms.includes(permission))) {
+          return true;
+        }
+      }
+    }
+    return false;
   };
 
   const hasRole = (role) => {

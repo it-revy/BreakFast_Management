@@ -306,7 +306,7 @@ const AdditionalOrdersPage = () => {
       )}
 
       {/* Financial Summary & Overview Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem', marginBottom: '1.75rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '1.25rem', marginBottom: '1.75rem' }}>
         <div className="glass-panel" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(37, 99, 235, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Wallet size={24} color="var(--accent-primary)" />
@@ -540,30 +540,8 @@ const AdditionalOrdersPage = () => {
 
       {/* CREATE / EDIT ORDER MODAL */}
       {showModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(15, 23, 42, 0.65)',
-          backdropFilter: 'blur(4px)',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '1rem'
-        }}>
-          <div className="glass-panel" style={{
-            width: '100%',
-            maxWidth: '750px',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            background: 'white',
-            borderRadius: 'var(--radius-md)',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-            padding: '1.75rem'
-          }}>
+        <div className="modal-backdrop">
+          <div className="modal-content" style={{ maxWidth: '750px' }}>
             {/* Modal Header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
               <h2 style={{ fontSize: '1.2rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -589,7 +567,7 @@ const AdditionalOrdersPage = () => {
                 <div style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   <AlertCircle size={18} color="#dc2626" /> Insufficient breakfast fund.
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginTop: '0.5rem', background: 'white', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid #fee2e2', textAlign: 'center' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '0.75rem', marginTop: '0.5rem', background: 'white', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid #fee2e2', textAlign: 'center' }}>
                   <div>
                     <span style={{ fontSize: '0.75rem', color: '#6b7280', display: 'block' }}>Available</span>
                     <strong style={{ color: '#059669', fontSize: '1rem' }}>₹{insufficientError.available}</strong>
@@ -608,7 +586,7 @@ const AdditionalOrdersPage = () => {
 
             <form onSubmit={handleSubmit}>
               {/* Order Info */}
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
+              <div className="form-grid-2" style={{ marginBottom: '1.25rem' }}>
                 <div className="form-group">
                   <label className="form-label">Order Title *</label>
                   <input
@@ -648,7 +626,7 @@ const AdditionalOrdersPage = () => {
                   const qty = item.quantity !== undefined && item.quantity !== '' ? Number(item.quantity) : applicableCount;
                   const total = price * qty;
                   return (
-                    <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 36px', gap: '0.5rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <div key={idx} className="item-input-row">
                       <input
                         type="text"
                         className="form-input"
@@ -702,7 +680,7 @@ const AdditionalOrdersPage = () => {
                   const qty = Number(item.quantity) || 1;
                   const total = price * qty;
                   return (
-                    <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 36px', gap: '0.5rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <div key={idx} className="item-input-row">
                       <input
                         type="text"
                         className="form-input"
@@ -763,30 +741,8 @@ const AdditionalOrdersPage = () => {
 
       {/* VIEW ORDER DETAILS MODAL */}
       {viewOrder && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(15, 23, 42, 0.65)',
-          backdropFilter: 'blur(4px)',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '1rem'
-        }}>
-          <div className="glass-panel" style={{
-            width: '100%',
-            maxWidth: '600px',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            background: 'white',
-            borderRadius: 'var(--radius-md)',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-            padding: '1.75rem'
-          }}>
+        <div className="modal-backdrop">
+          <div className="modal-content" style={{ maxWidth: '600px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
               <div>
                 <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: 'var(--accent-primary)', fontWeight: 700 }}>{viewOrder.orderId}</span>

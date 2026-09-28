@@ -21,10 +21,11 @@ const { requirePermission } = require('../middleware/rbac');
 
 router.use(protect);
 
-router.get('/today', requirePermission('breakfast.view_own'), getTodayStatus);
-router.post('/submit', requirePermission('breakfast.submit'), submitDailyBreakfast);
-router.post('/multi-day-absence', requirePermission('breakfast.submit'), submitMultiDayAbsence);
-router.get('/history', requirePermission('breakfast.history_own'), getOwnHistory);
+// Personal Breakfast Response routes (Available to EVERY authenticated user for their own record)
+router.get('/today', getTodayStatus);
+router.post('/submit', submitDailyBreakfast);
+router.post('/multi-day-absence', submitMultiDayAbsence);
+router.get('/history', getOwnHistory);
 
 // Admin / Operational routes
 router.get('/admin/summary', requirePermission('breakfast.view'), getAdminSummary);

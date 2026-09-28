@@ -277,7 +277,7 @@ const BreakfastOrdersPage = () => {
       ) : (
         <>
           {/* DESKTOP TABLE VIEW (Visible on tablet & desktop) */}
-          <div className="glass-panel desktop-only-table" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
+          <div className="glass-panel desktop-only" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
             <div className="table-container">
               <table className="custom-table">
                 <thead>
@@ -370,7 +370,7 @@ const BreakfastOrdersPage = () => {
           </div>
 
           {/* MOBILE CARDS VIEW (Visible on mobile screens) */}
-          <div className="mobile-only-cards" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+          <div className="mobile-only mobile-card-list" style={{ marginBottom: '1.5rem' }}>
             {orders.map(order => (
               <div key={order._id} className="glass-panel" style={{ padding: '1.25rem', borderLeft: `5px solid ${order.orderType === 'DAILY_ENTRY' ? '#0284c7' : '#8b5cf6'}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>

@@ -129,17 +129,17 @@ const ReportsPage = () => {
       </div>
 
       {/* Filter Controls Panel */}
-      <div className="glass-panel" style={{ padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+      <div className="glass-panel" style={{ padding: '1.25rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
           {/* Year Filter */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: '1 1 140px', minWidth: '130px' }}>
             <Calendar size={18} color="var(--accent-primary)" />
             <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Year:</span>
             <select
               className="form-select"
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
-              style={{ width: '150px', padding: '0.45rem 0.8rem' }}
+              style={{ flex: 1, minWidth: '90px', padding: '0.45rem 0.8rem' }}
             >
               <option value="all">All Years</option>
               {availableYears.map(y => (
@@ -149,28 +149,28 @@ const ReportsPage = () => {
           </div>
 
           {/* Report Type Selector */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: '2 1 220px', minWidth: '180px' }}>
             <FileText size={18} color="var(--accent-primary)" />
-            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Report Type:</span>
+            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Type:</span>
             <select
               className="form-select"
               value={reportType}
               onChange={(e) => setReportType(e.target.value)}
-              style={{ width: '230px', padding: '0.45rem 0.8rem' }}
+              style={{ flex: 1, minWidth: '160px', padding: '0.45rem 0.8rem' }}
             >
               <option value="MONTHLY_SUMMARY">Monthly Breakfast & Money Report</option>
             </select>
           </div>
 
           {/* Department Filter */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: '2 1 200px', minWidth: '170px' }}>
             <Filter size={18} color="var(--accent-primary)" />
-            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Department:</span>
+            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Dept:</span>
             <select
               className="form-select"
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
-              style={{ width: '200px', padding: '0.45rem 0.8rem' }}
+              style={{ flex: 1, minWidth: '140px', padding: '0.45rem 0.8rem' }}
             >
               <option value="ALL">All Departments</option>
               <option value="IT Infrastructure">IT Infrastructure</option>
@@ -185,8 +185,8 @@ const ReportsPage = () => {
             </select>
           </div>
 
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <button className="btn btn-primary" onClick={fetchMonthlyReport} disabled={loading}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: '1 1 auto', justifyContent: 'flex-end' }}>
+            <button className="btn btn-primary" onClick={fetchMonthlyReport} disabled={loading} style={{ whiteSpace: 'nowrap' }}>
               Generate Report
             </button>
           </div>
@@ -245,7 +245,7 @@ const ReportsPage = () => {
       </div>
 
       {/* Tabs Navigation Bar */}
-      <div style={{ display: 'flex', borderBottom: '2px solid var(--border-color)', marginBottom: '1.5rem', gap: '0.5rem', flexWrap: 'wrap' }}>
+      <div className="tabs-scroll" style={{ display: 'flex', borderBottom: '2px solid var(--border-color)', marginBottom: '1.5rem', gap: '0.5rem' }}>
         <button
           onClick={() => setActiveTab('monthly_summary')}
           style={{
@@ -259,7 +259,8 @@ const ReportsPage = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            fontSize: '0.9rem'
+            fontSize: '0.9rem',
+            whiteSpace: 'nowrap'
           }}
         >
           <FileText size={16} /> Sheet 1: Monthly Summary
@@ -278,7 +279,8 @@ const ReportsPage = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            fontSize: '0.9rem'
+            fontSize: '0.9rem',
+            whiteSpace: 'nowrap'
           }}
         >
           <Users size={16} /> Sheet 2: Employee Monthly Report
@@ -297,7 +299,8 @@ const ReportsPage = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            fontSize: '0.9rem'
+            fontSize: '0.9rem',
+            whiteSpace: 'nowrap'
           }}
         >
           <ShoppingBag size={16} /> Sheet 3: Order Summary
@@ -316,7 +319,8 @@ const ReportsPage = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            fontSize: '0.9rem'
+            fontSize: '0.9rem',
+            whiteSpace: 'nowrap'
           }}
         >
           <Wallet size={16} /> Sheet 4: Money Transactions

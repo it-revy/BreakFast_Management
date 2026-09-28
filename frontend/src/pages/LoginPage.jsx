@@ -38,10 +38,10 @@ const LoginPage = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#f8fafc',
-      padding: '2rem'
+      background: 'var(--bg-app)',
+      padding: '1rem'
     }}>
-      <div className="panel-card" style={{ width: '100%', maxWidth: '420px', padding: '2.25rem', background: '#ffffff' }}>
+      <div className="panel-card" style={{ width: '100%', maxWidth: '420px', padding: '2rem 1.5rem', background: '#ffffff', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-md)' }}>
         <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
           <div style={{
             width: '52px',

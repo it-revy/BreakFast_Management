@@ -304,7 +304,7 @@ const DailyEntryPage = () => {
           </h3>
 
           {/* Desktop Table View */}
-          <div className="table-container sidebar-desktop" style={{ maxHeight: '380px', overflowY: 'auto' }}>
+          <div className="table-container desktop-only" style={{ maxHeight: '380px', overflowY: 'auto' }}>
             <table className="custom-table">
               <thead>
                 <tr>
@@ -401,7 +401,7 @@ const DailyEntryPage = () => {
           </div>
 
           {/* Mobile Card View (< 768px) */}
-          <div className="hamburger-btn" style={{ flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
+          <div className="mobile-only" style={{ flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
             {data?.applicableEmployees?.length === 0 ? (
               <div style={{ padding: '1rem', textAlign: 'center', color: 'var(--text-muted)' }}>No applicable employees for this date.</div>
             ) : (
@@ -483,7 +483,7 @@ const DailyEntryPage = () => {
               const itemTotal = price * qty;
 
               return (
-                <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 40px', gap: '0.75rem', alignItems: 'center', marginBottom: '0.75rem' }}>
+                <div key={idx} className="item-input-row">
                   <div>
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Item Name</label>
                     <input
@@ -516,14 +516,14 @@ const DailyEntryPage = () => {
                       onChange={(e) => updateBreakfastItem(idx, 'quantity', e.target.value)}
                     />
                   </div>
-                  <div>
+                  <div className="item-total-col">
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Total (₹)</label>
-                    <div style={{ padding: '0.55rem', background: '#f1f5f9', borderRadius: 'var(--radius-sm)', fontWeight: 700, color: 'var(--text-primary)' }}>
+                    <div style={{ padding: '0.55rem', background: '#ffffff', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', fontWeight: 700, color: 'var(--text-primary)', minHeight: '42px', display: 'flex', alignItems: 'center' }}>
                       ₹{itemTotal}
                     </div>
                   </div>
-                  <div style={{ alignSelf: 'end' }}>
-                    <button type="button" className="btn btn-secondary" onClick={() => removeBreakfastItem(idx)} style={{ color: 'var(--danger)', padding: '0.55rem' }}>
+                  <div className="item-remove-cell">
+                    <button type="button" className="btn btn-secondary" onClick={() => removeBreakfastItem(idx)} style={{ color: 'var(--danger)', padding: '0.55rem', minWidth: '42px' }}>
                       <Trash2 size={16} />
                     </button>
                   </div>
@@ -561,7 +561,7 @@ const DailyEntryPage = () => {
               const itemTotal = price * qty;
 
               return (
-                <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 40px', gap: '0.75rem', alignItems: 'center', marginBottom: '0.75rem' }}>
+                <div key={idx} className="item-input-row">
                   <div>
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Common Item Name</label>
                     <input
@@ -593,14 +593,14 @@ const DailyEntryPage = () => {
                       onChange={(e) => updateCommonItem(idx, 'quantity', e.target.value)}
                     />
                   </div>
-                  <div>
+                  <div className="item-total-col">
                     <label className="form-label" style={{ fontSize: '0.75rem' }}>Total (₹)</label>
-                    <div style={{ padding: '0.55rem', background: '#f1f5f9', borderRadius: 'var(--radius-sm)', fontWeight: 700, color: 'var(--text-primary)' }}>
+                    <div style={{ padding: '0.55rem', background: '#ffffff', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', fontWeight: 700, color: 'var(--text-primary)', minHeight: '42px', display: 'flex', alignItems: 'center' }}>
                       ₹{itemTotal}
                     </div>
                   </div>
-                  <div style={{ alignSelf: 'end' }}>
-                    <button type="button" className="btn btn-secondary" onClick={() => removeCommonItem(idx)} style={{ color: 'var(--danger)', padding: '0.55rem' }}>
+                  <div className="item-remove-cell">
+                    <button type="button" className="btn btn-secondary" onClick={() => removeCommonItem(idx)} style={{ color: 'var(--danger)', padding: '0.55rem', minWidth: '42px' }}>
                       <Trash2 size={16} />
                     </button>
                   </div>

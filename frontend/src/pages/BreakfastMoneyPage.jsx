@@ -438,25 +438,25 @@ const BreakfastMoneyPage = () => {
       </div>
 
       {/* Tab Navigation */}
-      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
+      <div className="tabs-scroll" style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
         <button
           className={`btn ${activeTab === 'transactions' ? 'btn-primary' : 'btn-secondary'}`}
           onClick={() => setActiveTab('transactions')}
-          style={{ fontSize: '0.85rem' }}
+          style={{ fontSize: '0.85rem', whiteSpace: 'nowrap' }}
         >
           <Clock size={16} /> Transaction History
         </button>
         <button
           className={`btn ${activeTab === 'daily' ? 'btn-primary' : 'btn-secondary'}`}
           onClick={() => setActiveTab('daily')}
-          style={{ fontSize: '0.85rem' }}
+          style={{ fontSize: '0.85rem', whiteSpace: 'nowrap' }}
         >
           <Calendar size={16} /> Daily Money Statement
         </button>
         <button
           className={`btn ${activeTab === 'monthly' ? 'btn-primary' : 'btn-secondary'}`}
           onClick={() => setActiveTab('monthly')}
-          style={{ fontSize: '0.85rem' }}
+          style={{ fontSize: '0.85rem', whiteSpace: 'nowrap' }}
         >
           <FileSpreadsheet size={16} /> Monthly Money Statement
         </button>
@@ -807,7 +807,7 @@ const BreakfastMoneyPage = () => {
               </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+            <div className="form-grid-2" style={{ marginBottom: '1rem' }}>
               <div className="form-group">
                 <label className="form-label">Expense Date *</label>
                 <input
@@ -830,7 +830,7 @@ const BreakfastMoneyPage = () => {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+            <div className="form-grid-2" style={{ marginBottom: '1rem' }}>
               <div className="form-group">
                 <label className="form-label">Amount (₹) *</label>
                 <input

@@ -95,7 +95,7 @@ const SettingsPage = () => {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))', gap: '1.5rem' }}>
         {/* Cutoff Time Configuration */}
         <div className="glass-panel" style={{ padding: '1.75rem' }}>
           <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', fontSize: '1.2rem' }}>
@@ -146,7 +146,7 @@ const SettingsPage = () => {
             {reasons.map(r => (
               <div key={r.code} className="glass-card" style={{ padding: '0.85rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
-                  <strong style={{ color: 'white', display: 'block' }}>{r.label}</strong>
+                  <strong style={{ color: 'var(--text-primary)', display: 'block' }}>{r.label}</strong>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Code: {r.code}</span>
                 </div>
                 {r.isCustomAllowed && (
@@ -160,7 +160,7 @@ const SettingsPage = () => {
 
       {/* Add Reason Modal */}
       {showReasonModal && (
-        <div className="modal-overlay">
+        <div className="modal-backdrop">
           <div className="modal-content">
             <h2>Add Custom Rejection Reason</h2>
             <form onSubmit={handleAddReason} style={{ marginTop: '1rem' }}>

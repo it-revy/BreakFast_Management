@@ -107,20 +107,7 @@ const Sidebar = ({ isMobileOpen, onCloseMobile }) => {
 
       {/* Nav List */}
       <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', flex: 1, overflowY: 'auto' }}>
-        {/* 0. Employee Daily Form (For Employees) */}
-        {hasPermission('breakfast.view_own') && !hasPermission('breakfast.view') && (
-          <NavLink
-            to="/today"
-            onClick={handleLinkClick}
-            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-            title="Daily Entry Form"
-          >
-            <Utensils size={18} />
-            {(!isCollapsed || isMobileOpen) && <span>Daily Entry Form</span>}
-          </NavLink>
-        )}
-
-        {/* 1. Dashboard - FIRST Navigation Item */}
+        {/* 1. Dashboard - FIRST Navigation Item for Admins */}
         {hasPermission('breakfast.view') && (
           <NavLink
             to="/admin/dashboard"
@@ -132,6 +119,30 @@ const Sidebar = ({ isMobileOpen, onCloseMobile }) => {
             {(!isCollapsed || isMobileOpen) && <span>Dashboard</span>}
           </NavLink>
         )}
+
+        {/* Dashboard for CEO (when breakfast.view is not present) */}
+        {!hasPermission('breakfast.view') && hasPermission('breakfast.dashboard.view') && (
+          <NavLink
+            to="/ceo-dashboard"
+            onClick={handleLinkClick}
+            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            title="Dashboard"
+          >
+            <LayoutDashboard size={18} />
+            {(!isCollapsed || isMobileOpen) && <span>Dashboard</span>}
+          </NavLink>
+        )}
+
+        {/* Common Breakfast Response - For ALL Authenticated Users */}
+        <NavLink
+          to="/today"
+          onClick={handleLinkClick}
+          className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+          title="Breakfast Response"
+        >
+          <Utensils size={18} />
+          {(!isCollapsed || isMobileOpen) && <span>Breakfast Response</span>}
+        </NavLink>
 
         {/* 2. Breakfast Dropdown Accordion */}
         {hasPermission('breakfast.view') && (
@@ -269,8 +280,8 @@ const Sidebar = ({ isMobileOpen, onCloseMobile }) => {
           </NavLink>
         )}
 
-        {/* CEO Analytics */}
-        {hasPermission('breakfast.dashboard.view') && (
+        {/* CEO Analytics (for Admins with CEO dashboard view) */}
+        {hasPermission('breakfast.view') && hasPermission('breakfast.dashboard.view') && (
           <NavLink
             to="/ceo-dashboard"
             onClick={handleLinkClick}

@@ -83,7 +83,7 @@ const CEOViewPage = () => {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))', gap: '1.5rem' }}>
         {/* Daily Trend Table */}
         <div className="glass-panel" style={{ padding: '1.5rem' }}>
           <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -106,7 +106,7 @@ const CEOViewPage = () => {
                 ) : (
                   dailyTrend.map(d => (
                     <tr key={d.date}>
-                      <td><strong style={{ color: 'white' }}>{d.date}</strong></td>
+                      <td><strong style={{ color: 'var(--text-primary)' }}>{d.date}</strong></td>
                       <td><span style={{ color: 'var(--success)', fontWeight: 700 }}>{d.yes}</span></td>
                       <td><span style={{ color: 'var(--danger)', fontWeight: 700 }}>{d.no}</span></td>
                       <td>{d.yes + d.no}</td>

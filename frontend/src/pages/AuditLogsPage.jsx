@@ -40,20 +40,20 @@ const AuditLogsPage = () => {
 
   return (
     <div className="page-body">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', margin: 0 }}>
             <ShieldAlert color="var(--accent-primary)" /> Platform Audit Trail & History
           </h1>
-          <p style={{ color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+          <p style={{ color: 'var(--text-secondary)', marginTop: '0.25rem', fontSize: '0.875rem' }}>
             Accountability records identifying actual user name, role used, and state changes
           </p>
         </div>
       </div>
 
       {/* Filter Bar */}
-      <div className="glass-panel" style={{ padding: '1.25rem', marginBottom: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        <form onSubmit={handleSearchSubmit} style={{ flex: 1, display: 'flex', gap: '0.5rem' }}>
+      <div className="glass-panel" style={{ padding: '1.25rem', marginBottom: '1.5rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        <form onSubmit={handleSearchSubmit} style={{ flex: '1 1 240px', display: 'flex', gap: '0.5rem', minWidth: '200px' }}>
           <input
             type="text"
             className="form-input"
@@ -61,7 +61,7 @@ const AuditLogsPage = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button type="submit" className="btn btn-secondary">
+          <button type="submit" className="btn btn-secondary" style={{ whiteSpace: 'nowrap' }}>
             <Search size={16} /> Search
           </button>
         </form>
@@ -70,7 +70,7 @@ const AuditLogsPage = () => {
           className="form-select"
           value={actionFilter}
           onChange={(e) => setActionFilter(e.target.value)}
-          style={{ width: '240px' }}
+          style={{ flex: '1 1 200px', minWidth: '160px' }}
         >
           <option value="ALL">All Actions</option>
           <option value="EMPLOYEE_CREATED">EMPLOYEE_CREATED</option>
@@ -143,7 +143,7 @@ const AuditLogsPage = () => {
 
       {/* Diff / State Viewer Modal */}
       {showModal && selectedLog && (
-        <div className="modal-overlay">
+        <div className="modal-backdrop">
           <div className="modal-content" style={{ maxWidth: '650px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
               <h2>Audit Log Details ({selectedLog.auditId})</h2>
@@ -152,14 +152,14 @@ const AuditLogsPage = () => {
               </button>
             </div>
 
-            <div style={{ marginBottom: '1rem', background: 'rgba(15, 23, 42, 0.5)', padding: '1rem', borderRadius: 'var(--radius-sm)' }}>
+            <div style={{ marginBottom: '1rem', background: '#f8fafc', border: '1px solid var(--border-color)', padding: '1rem', borderRadius: 'var(--radius-sm)' }}>
               <div><strong>Action:</strong> {selectedLog.action}</div>
               <div><strong>Performed By:</strong> {selectedLog.performedBy?.employeeName} ({selectedLog.performedBy?.employeeId})</div>
               <div><strong>Role Used:</strong> {selectedLog.performedBy?.roleUsed}</div>
               <div><strong>Timestamp:</strong> {new Date(selectedLog.timestamp).toISOString()}</div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+            <div className="form-grid-2" style={{ marginTop: '1rem' }}>
               <div>
                 <h4 style={{ marginBottom: '0.5rem', color: 'var(--danger)' }}>Before State</h4>
                 <pre style={{

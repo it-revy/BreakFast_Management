@@ -97,14 +97,14 @@ const TodayBreakfastListPage = () => {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Business Date:</span>
           <input
             type="date"
             className="form-input"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            style={{ width: '160px', padding: '0.45rem 0.75rem' }}
+            style={{ width: 'auto', minWidth: '140px', padding: '0.45rem 0.75rem' }}
           />
         </div>
       </div>
@@ -154,7 +154,7 @@ const TodayBreakfastListPage = () => {
 
       {/* Filter Bar */}
       <div className="panel-card" style={{ padding: '1rem', marginBottom: '1.25rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-        <form onSubmit={(e) => { e.preventDefault(); fetchList(); }} style={{ flex: 1, display: 'flex', gap: '0.5rem', minWidth: '240px' }}>
+        <form onSubmit={(e) => { e.preventDefault(); fetchList(); }} style={{ flex: '1 1 240px', display: 'flex', gap: '0.5rem', minWidth: '200px' }}>
           <input
             type="text"
             className="form-input"
@@ -171,7 +171,7 @@ const TodayBreakfastListPage = () => {
           className="form-select"
           value={department}
           onChange={(e) => setDepartment(e.target.value)}
-          style={{ width: '180px' }}
+          style={{ width: 'auto', minWidth: '150px', flex: '1 1 auto' }}
         >
           <option value="ALL">All Departments</option>
           <option value="IT Infrastructure">IT Infrastructure</option>
