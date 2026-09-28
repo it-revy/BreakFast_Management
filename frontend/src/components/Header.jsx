@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Breadcrumb from './Breadcrumb';
 import { LogOut, Bell, ChevronDown, Shield, Menu } from 'lucide-react';
@@ -7,6 +8,20 @@ const Header = ({ onToggleMobile }) => {
   const { user, activeRole, switchRole, logout } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  const handleRoleChange = (newRole) => {
+    switchRole(newRole);
+    if (newRole === 'EMPLOYEE') {
+      navigate('/today');
+    } else if (newRole === 'FINANCE_MANAGER') {
+      navigate('/finance/fund-requests');
+    } else if (newRole === 'CEO') {
+      navigate('/ceo-dashboard');
+    } else if (newRole === 'IT_ADMIN' || newRole === 'BREAKFAST_ADMIN') {
+      navigate('/admin/dashboard');
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -56,7 +71,7 @@ const Header = ({ onToggleMobile }) => {
             <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Role:</span>
             <select
               value={activeRole || ''}
-              onChange={(e) => switchRole(e.target.value)}
+              onChange={(e) => handleRoleChange(e.target.value)}
               className="form-select"
               style={{
                 padding: '0.15rem 0.4rem',

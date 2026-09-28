@@ -333,10 +333,6 @@ const seedDatabase = async () => {
     }
   ];
 
-  // Remove any legacy demo employees not in production list
-  const validIds = defaultAccounts.map(e => e.employeeId);
-  await Employee.deleteMany({ employeeId: { $nin: validIds } });
-
   for (const account of defaultAccounts) {
     const existing = await Employee.findOne({ employeeId: account.employeeId });
 
@@ -368,8 +364,8 @@ const seedDatabase = async () => {
       existing.roles = account.roles;
       existing.breakfastParticipationType = account.breakfastParticipationType;
 
-      // If user hasn't changed password yet (forcePasswordChange is true), missing hash, or explicit reset
-      if (!existing.passwordHash || existing.forcePasswordChange || process.env.RESET_SEEDED_PASSWORDS === 'true') {
+      // Do not overwrite existing passwords unexpectedly unless missing or explicit override requested
+      if (!existing.passwordHash || process.env.RESET_SEEDED_PASSWORDS === 'true') {
         existing.passwordHash = await bcrypt.hash(account.initialPasswordText, 10);
         existing.forcePasswordChange = true;
       }

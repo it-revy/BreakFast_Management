@@ -49,9 +49,32 @@ export const AuthProvider = ({ children }) => {
         setActiveRole(userData.roles[0]);
         return { success: true };
       }
-      return { success: false, message: res.data.message };
+      return { success: false, message: res.data.message || 'Login failed' };
     } catch (err) {
-      return { success: false, message: err.response?.data?.message || 'Invalid username or password' };
+      if (!err.response) {
+        if (err.code === 'ECONNABORTED') {
+          return { success: false, message: 'Connection timed out. The server might be starting up. Please retry in a few seconds.' };
+        }
+        return { success: false, message: 'Network Error: Unable to reach the backend service. Please check your internet connection or verify the backend is online.' };
+      }
+
+      if (err.response.status === 401) {
+        return { success: false, message: err.response.data?.message || 'Invalid username or password.' };
+      }
+
+      if (err.response.status === 403) {
+        return { success: false, message: err.response.data?.message || 'Account is deactivated. Contact IT Administrator.' };
+      }
+
+      if (err.response.status === 404) {
+        return { success: false, message: 'Authentication endpoint not found (404). Please ensure backend is properly deployed.' };
+      }
+
+      if (err.response.status >= 500) {
+        return { success: false, message: 'Backend server error (500). Please try again or contact IT Administrator.' };
+      }
+
+      return { success: false, message: err.response.data?.message || 'Authentication request failed.' };
     }
   };
 
@@ -84,7 +107,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const hasPermission = (permission) => {
-    if (!user || !user.permissions) return false;
+    if (!user) return false;
+    // Check authoritative permissions of the currently active role
+    if (activeRole && user.permissionsByRole && user.permissionsByRole[activeRole]) {
+      const rolePerms = user.permissionsByRole[activeRole];
+      return rolePerms.includes('*') || rolePerms.includes(permission);
+    }
+    // Fallback to general user permissions
+    if (!user.permissions) return false;
     return user.permissions.includes('*') || user.permissions.includes(permission);
   };
 

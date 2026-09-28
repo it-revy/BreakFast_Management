@@ -80,11 +80,11 @@ Create `.env` in `backend/.env` (refer to `.env.example`):
 ```env
 PORT=5000
 NODE_ENV=production
-MONGODB_URI=mongodb://127.0.0.1:27017/company_platform
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/company_platform?retryWrites=true&w=majority
 JWT_SECRET=super_secret_jwt_key_breakfast_2026_xyz
 JWT_EXPIRES_IN=24h
-CLIENT_URL=http://localhost:3000
-CORS_ORIGIN=http://localhost:3000
+CLIENT_URL=https://break-fast-management.vercel.app
+CORS_ORIGIN=https://break-fast-management.vercel.app
 ```
 
 ### 2. Database Seeding

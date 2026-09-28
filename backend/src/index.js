@@ -27,26 +27,35 @@ app.use(helmet({
 }));
 
 // Whitelist CORS configuration for Vercel frontend and authorized clients
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  process.env.CLIENT_URL,
+const parseOrigins = (val) => {
+  if (!val) return [];
+  return val.split(',').map(s => s.trim().replace(/\/+$/, '')).filter(Boolean);
+};
+
+const allowedOrigins = Array.from(new Set([
+  ...parseOrigins(process.env.CORS_ORIGIN),
+  ...parseOrigins(process.env.FRONTEND_URL),
+  ...parseOrigins(process.env.CLIENT_URL),
+  'https://break-fast-management.vercel.app', // Explicit production Vercel frontend
   'http://localhost:3000',
   'http://localhost:5173',
   'http://127.0.0.1:3000'
-].filter(Boolean);
+]));
 
 const corsOptions = {
   origin: (origin, callback) => {
     // Allow non-browser requests or same-origin (health checks, curl, server-to-server)
     if (!origin) return callback(null, true);
 
+    const cleanOrigin = origin.replace(/\/+$/, '');
+
     // Exact match against whitelist
-    if (allowedOrigins.includes(origin)) {
+    if (allowedOrigins.includes(cleanOrigin)) {
       return callback(null, true);
     }
 
-    // Support for Vercel preview deployments during staging if explicitly enabled
-    if (process.env.ALLOW_VERCEL_PREVIEWS === 'true' && /^https:\/\/[a-zA-Z0-9_-]+\.vercel\.app$/.test(origin)) {
+    // Support for Vercel preview deployments if explicitly enabled
+    if (process.env.ALLOW_VERCEL_PREVIEWS === 'true' && /^https:\/\/[a-zA-Z0-9_-]+\.vercel\.app$/.test(cleanOrigin)) {
       return callback(null, true);
     }
 
@@ -62,6 +71,7 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Role-Used']
 };
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
 // Serve OpenAPI/Swagger UI docs at /api/docs
@@ -78,11 +88,24 @@ app.use('/api/settings', settingsRoutes);
 app.use('/api/holidays', holidayRoutes);
 app.use('/api/orders', orderRoutes);
 
-// Health check endpoint
+// Health check endpoint (checks MongoDB connection status)
+const mongoose = require('mongoose');
 app.get('/api/health', (req, res) => {
+  const isDbConnected = mongoose.connection.readyState === 1;
+
+  if (!isDbConnected) {
+    return res.status(503).json({
+      success: false,
+      status: 'unhealthy',
+      database: 'disconnected',
+      message: 'Database connection is unavailable'
+    });
+  }
+
   res.status(200).json({
     success: true,
-    status: 'healthy'
+    status: 'healthy',
+    database: 'connected'
   });
 });
 
@@ -113,21 +136,21 @@ const PORT = process.env.PORT || 5000;
 const HOST = '0.0.0.0';
 
 const startServer = async () => {
-  await connectDB();
-
   try {
-    console.log('[Init] Syncing platform roles, permissions, settings, and baseline accounts...');
-    await seedDatabase();
-  } catch (err) {
-    console.warn('[Init] Auto-seed note:', err.message);
-  }
+    console.log('[Server] Connecting to MongoDB Atlas before accepting requests...');
+    await connectDB();
+    console.log('[Server] Database connection verified. Starting HTTP server...');
 
-  app.listen(PORT, HOST, () => {
-    console.log(`[Server] Breakfast Management API running on ${HOST}:${PORT} (NODE_ENV=${process.env.NODE_ENV || 'development'})`);
-    if (process.env.NODE_ENV !== 'production') {
-      console.log(`[Docs] Swagger OpenAPI Documentation: http://localhost:${PORT}/api/docs`);
-    }
-  });
+    app.listen(PORT, HOST, () => {
+      console.log(`[Server] Breakfast Management API running on ${HOST}:${PORT} (NODE_ENV=${process.env.NODE_ENV || 'development'})`);
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`[Docs] Swagger OpenAPI Documentation: http://localhost:${PORT}/api/docs`);
+      }
+    });
+  } catch (error) {
+    console.error(`[Server] FATAL: Database startup failure: ${error.message}`);
+    process.exit(1);
+  }
 };
 
 if (require.main === module) {

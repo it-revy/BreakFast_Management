@@ -1,7 +1,30 @@
 import axios from 'axios';
 
+// Resolve backend API URL with production-safe fallback
+// Production Backend: https://breakfast-management.onrender.com
+// Development Backend: http://localhost:5000
+const getBaseURL = () => {
+  const isDev = import.meta.env.DEV;
+  const envUrl = import.meta.env.VITE_API_URL;
+
+  let targetUrl = '';
+  if (envUrl && typeof envUrl === 'string' && envUrl.trim() !== '') {
+    targetUrl = envUrl.trim();
+  } else if (isDev) {
+    // Local development fallback
+    targetUrl = 'http://localhost:5000';
+  } else {
+    // Production safe fallback: NEVER make requests to Vercel origin /api
+    targetUrl = 'https://breakfast-management.onrender.com';
+  }
+
+  const cleanUrl = targetUrl.replace(/\/+$/, '');
+  return cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
+};
+
 const API = axios.create({
-  baseURL: '/api'
+  baseURL: getBaseURL(),
+  timeout: 30000
 });
 
 // Attach JWT bearer token and role headers
